@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: slow_social_pg
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: slow_social
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: slow_social_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  pg_data:

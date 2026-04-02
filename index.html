@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIT Date | 北京理工大学专属匹配平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bit-green': '#007D44',
+                        'bit-dark': '#004B28',
+                        'bit-gold': '#8B5A2B',
+                        'paper': '#F9FAFB'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url('assets/bg-hero.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-paper text-gray-800 font-sans antialiased">
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <svg class="w-8 h-8 text-bit-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path></svg>
+                    <span class="font-bold text-xl text-bit-dark tracking-tight">BIT Date</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#how-it-works" class="text-gray-600 hover:text-bit-green transition">运作方式</a>
+                    <a href="#why-us" class="text-gray-600 hover:text-bit-green transition">关于平台</a>
+                    <a href="app.html" class="text-gray-600 hover:text-bit-green transition">登录</a>
+                    <a href="app.html" class="bg-bit-green text-white px-5 py-2 rounded-full font-medium hover:bg-bit-dark transition shadow-md">注册体验</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-bg h-screen flex flex-col justify-center items-center text-center px-4 pt-16">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 tracking-tight">
+            BIT Date | <span class="text-green-300">专属匹配平台</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl font-light">
+            让一段缘分，值得在北理等待。
+        </p>
+        <p class="text-base text-gray-300 mb-10 max-w-3xl leading-relaxed">
+            只需填写一份深度问卷，每周五晚九点，您将收到一份专属匹配结果，并附上我们认为你们会合拍的“硬核”理由。
+        </p>
+        <a href="app.html" class="inline-block bg-bit-green text-white text-lg px-8 py-3 rounded-full font-semibold hover:bg-bit-dark transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            [ 立即加入，遇见你的TA ]
+        </a>
+
+        <div class="mt-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-white">
+            <p class="text-sm uppercase tracking-widest mb-3 opacity-80">距下次信封派发还有</p>
+            <div class="flex space-x-4 text-3xl md:text-4xl font-mono font-bold" id="countdown">
+                <div class="flex flex-col"><span id="days">00</span><span class="text-xs font-sans mt-1 opacity-70">天</span></div><span class="opacity-50">:</span>
+                <div class="flex flex-col"><span id="hours">00</span><span class="text-xs font-sans mt-1 opacity-70">时</span></div><span class="opacity-50">:</span>
+                <div class="flex flex-col"><span id="minutes">00</span><span class="text-xs font-sans mt-1 opacity-70">分</span></div><span class="opacity-50">:</span>
+                <div class="flex flex-col"><span id="seconds">00</span><span class="text-xs font-sans mt-1 opacity-70">秒</span></div>
+            </div>
+        </div>
+    </header>
+
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-bit-dark mb-16">运作方式</h2>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="bg-paper p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition text-center">
+                    <div class="text-5xl mb-4">📝</div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">01. 深度问卷</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">德以明理，学以精工。我们用严谨的态度，通过数十道关于价值观、情感与生活方式的问卷，充分了解你的内心世界。</p>
+                </div>
+                <div class="bg-paper p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition text-center">
+                    <div class="text-5xl mb-4">🕊️</div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">02. 开启信封</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">每周五晚九点，白鸽准时送信。你将收到对方的契合度得分及专属心动报告。如果心动，点击「联系TA」。</p>
+                </div>
+                <div class="bg-paper p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition text-center">
+                    <div class="text-5xl mb-4">🍂</div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">03. 校园相遇</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">交换邮箱后，剩下的交给你自己。也许是良乡南食堂的夜宵，也许是理科教学楼下的散步，或者一起在图书馆自习。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-us" class="py-20 bg-paper">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-bit-dark mb-16">为什么选择我们</h2>
+            <div class="grid md:grid-cols-2 gap-8 mb-20">
+                <div class="flex gap-4 items-start">
+                    <div class="bg-green-100 p-3 rounded-lg text-bit-green">🎯</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">“理”性算法</h4>
+                        <p class="text-gray-600 text-sm">不看照片，拒绝外貌焦虑。基于心理学模型的精准算法，寻找相似，更捕捉互补。</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <div class="bg-green-100 p-3 rounded-lg text-bit-green">🔒</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">“精”心守护</h4>
+                        <p class="text-gray-600 text-sm">隐私绝对优先。非公开社交平台，所有数据仅用于匹配，绝不向第三方展示。</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <div class="bg-green-100 p-3 rounded-lg text-bit-green">⏳</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">从前慢</h4>
+                        <p class="text-gray-600 text-sm">一周只匹配一次。给快节奏的学业生活留白，让相遇回归珍贵与期待。</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <div class="bg-green-100 p-3 rounded-lg text-bit-green">🎓</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">纯粹北理</h4>
+                        <p class="text-gray-600 text-sm">100% 真实同学圈，仅限 .edu.cn 校园邮箱验证注册。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 flex flex-col md:flex-row justify-around items-center text-center gap-8">
+                <div>
+                    <div class="text-4xl font-extrabold text-bit-green mb-2" id="stat-users">--</div>
+                    <div class="text-gray-500 font-medium">已验证北理同学</div>
+                </div>
+                <div class="hidden md:block w-px h-16 bg-gray-200"></div>
+                <div>
+                    <div class="text-4xl font-extrabold text-bit-green mb-2" id="stat-completion">--</div>
+                    <div class="text-gray-500 font-medium">深度问卷完成率</div>
+                </div>
+                <div class="hidden md:block w-px h-16 bg-gray-200"></div>
+                <div>
+                    <div class="text-4xl font-extrabold text-bit-green mb-2" id="stat-moments">--</div>
+                    <div class="text-gray-500 font-medium">成功心动瞬间</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-bit-dark mb-10">常见问题 (FAQ)</h2>
+            <div class="space-y-4">
+                <details class="group border border-gray-200 rounded-lg bg-gray-50 cursor-pointer">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800">
+                        <span>BIT Date 是相亲网站吗？</span>
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="text-gray-600 mt-3 group-open:animate-fadeIn p-5 pt-0 text-sm leading-relaxed">
+                        我们更愿意称之为“灵魂匹配平台”。初衷是帮你找到恋人，但如果你在这里遇到了志同道合的饭搭子、自习搭子甚至科研伙伴，我们也乐见其成。
+                    </p>
+                </details>
+                <details class="group border border-gray-200 rounded-lg bg-gray-50 cursor-pointer">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800">
+                        <span>匹配算法是怎么运行的？</span>
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="text-gray-600 mt-3 group-open:animate-fadeIn p-5 pt-0 text-sm leading-relaxed">
+                        算法参考了社会心理学中的关系契合度模型。作为北理人，我们深知数据的力量，但我们也相信，代码算不出所有的缘分，它只是为你们提供一个相识的契机。
+                    </p>
+                </details>
+                <details class="group border border-gray-200 rounded-lg bg-gray-50 cursor-pointer">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-gray-800">
+                        <span>如果这周期中考试/DDL太多怎么办？</span>
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <p class="text-gray-600 mt-3 group-open:animate-fadeIn p-5 pt-0 text-sm leading-relaxed">
+                        平台支持“随时暂停”。当你需要专注于学业时，可以在后台暂时关闭匹配；等你准备好了，随时可以重新开启。
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-bit-dark text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path></svg>
+                <span class="font-bold text-lg tracking-wider">BIT Date</span>
+            </div>
+            <div class="flex space-x-6 text-sm text-gray-300">
+                <a href="#" class="hover:text-white transition">关于我们</a>
+                <a href="#" class="hover:text-white transition">隐私协议</a>
+                <a href="#" class="hover:text-white transition">联系支持</a>
+                <a href="#" class="hover:text-white transition">加入开发团队</a>
+            </div>
+            <div class="text-sm text-gray-400">
+                &copy; 2026 BIT Date. Made with <span class="text-red-500">❤️</span> by BITers.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = window.location.origin && window.location.origin.startsWith('http')
+            ? window.location.origin
+            : 'http://127.0.0.1:8000';
+
+        function updateCountdown() {
+            const now = new Date();
+            const target = new Date();
+
+            target.setDate(now.getDate() + ((5 + 7 - now.getDay()) % 7));
+            target.setHours(21, 0, 0, 0);
+
+            if (now.getDay() === 5 && now.getHours() >= 21) {
+                target.setDate(target.getDate() + 7);
+            }
+
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / 1000 / 60) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = d.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        async function loadPublicStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/public/stats`);
+                if (!res.ok) {
+                    return;
+                }
+                const data = await res.json();
+                const usersEl = document.getElementById('stat-users');
+                const completionEl = document.getElementById('stat-completion');
+                const momentsEl = document.getElementById('stat-moments');
+
+                usersEl.innerText = `${data.verified_users ?? 0}+`;
+                completionEl.innerText = `${data.questionnaire_completion_rate ?? 0}%`;
+                momentsEl.innerText = `${data.successful_moments ?? 0}+`;
+            } catch (e) {
+            }
+        }
+
+        loadPublicStats();
+    </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIT Date 管理后台</title>
+  <style>
+    body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; margin: 0; background: #f3f5f7; color: #17212b; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 20px; }
+    .card { background: #fff; border: 1px solid #dfe6ee; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    h1 { margin: 0 0 16px; font-size: 28px; }
+    h2 { margin: 0 0 10px; font-size: 18px; }
+    .row { display: grid; grid-template-columns: 180px 1fr; gap: 10px; margin-bottom: 10px; align-items: center; }
+    input, select, textarea, button { font: inherit; }
+    input, select, textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #ced7e0; box-sizing: border-box; }
+    button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; background: #005f3a; color: #fff; }
+    button.secondary { background: #345; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .tile { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; }
+    .tile strong { display: block; font-size: 20px; margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid #e8eef4; padding: 8px; text-align: left; vertical-align: top; }
+    .muted { color: #617082; font-size: 13px; }
+    #msg { margin-top: 6px; min-height: 20px; color: #0a7a45; }
+    #err { margin-top: 6px; min-height: 20px; color: #c53030; }
+    @media (max-width: 860px) {
+      .row { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>BIT Date 管理后台</h1>
+
+    <div class="card">
+      <h2>管理员鉴权</h2>
+      <div class="row">
+        <label for="adminSecret">Admin Secret</label>
+        <input id="adminSecret" type="password" placeholder="输入 ADMIN_SECRET" />
+      </div>
+      <div class="actions">
+        <button id="btnConnect">连接后台</button>
+      </div>
+      <div id="msg"></div>
+      <div id="err"></div>
+    </div>
+
+    <div class="card">
+      <h2>系统总览</h2>
+      <div class="stats">
+        <div class="tile"><strong id="usersCount">0</strong><span>用户数</span></div>
+        <div class="tile"><strong id="qCount">0</strong><span>问卷数</span></div>
+        <div class="tile"><strong id="mCount">0</strong><span>匹配记录</span></div>
+        <div class="tile"><strong id="oCount">0</strong><span>发件箱记录</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>匹配调度配置</h2>
+      <p class="muted">Worker 每分钟检查一次，命中你设置的“周几 + 时 + 分（按时区）”时自动跑匹配。</p>
+      <div class="row"><label for="weekday">匹配周几</label><select id="weekday"><option value="1">周一</option><option value="2">周二</option><option value="3">周三</option><option value="4">周四</option><option value="5">周五</option><option value="6">周六</option><option value="0">周日</option></select></div>
+      <div class="row"><label for="hour">小时(0-23)</label><input id="hour" type="number" min="0" max="23" /></div>
+      <div class="row"><label for="minute">分钟(0-59)</label><input id="minute" type="number" min="0" max="59" /></div>
+      <div class="row"><label for="timezone">时区</label><input id="timezone" type="text" placeholder="Asia/Shanghai" /></div>
+      <div class="actions">
+        <button id="btnSaveSchedule">保存调度配置</button>
+        <button id="btnRunMatch" class="secondary">立即执行一次匹配</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>发件箱配置</h2>
+      <p class="muted">当前支持真实发送：Resend（推荐）或 MailChannels。SMTP 参数仅用于兼容保留，不会在 Worker 里直连 SMTP。</p>
+      <div class="row"><label for="emailProvider">发件方式</label><select id="emailProvider"><option value="resend">Resend</option><option value="mailchannels">MailChannels</option><option value="smtp">SMTP(不支持直连)</option></select></div>
+      <div class="row"><label for="resendApiKey">Resend API Key</label><input id="resendApiKey" type="password" placeholder="re_xxx" /></div>
+      <div class="row"><label for="smtpHost">SMTP Host</label><input id="smtpHost" type="text" /></div>
+      <div class="row"><label for="smtpPort">SMTP Port</label><input id="smtpPort" type="number" /></div>
+      <div class="row"><label for="smtpSecure">SMTP Secure</label><select id="smtpSecure"><option value="true">true</option><option value="false">false</option></select></div>
+      <div class="row"><label for="smtpUser">SMTP User</label><input id="smtpUser" type="text" /></div>
+      <div class="row"><label for="smtpPassword">SMTP Password</label><input id="smtpPassword" type="password" /></div>
+      <div class="row"><label for="senderName">发件人名称</label><input id="senderName" type="text" /></div>
+      <div class="row"><label for="senderEmail">发件邮箱</label><input id="senderEmail" type="email" /></div>
+      <div class="row"><label for="testEmail">测试收件邮箱</label><input id="testEmail" type="email" placeholder="test@example.com" /></div>
+      <div class="actions">
+        <button id="btnSaveEmail">保存发件配置</button>
+        <button id="btnSendTest" class="secondary">发送测试邮件记录</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>匹配执行过程</h2>
+      <table>
+        <thead>
+          <tr><th>开始时间</th><th>触发方式</th><th>状态</th><th>周起始</th><th>候选人数</th><th>候选配对</th><th>成功配对</th><th>错误</th></tr>
+        </thead>
+        <tbody id="runRows"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>发件箱日志</h2>
+      <table>
+        <thead>
+          <tr><th>创建时间</th><th>收件人</th><th>主题</th><th>provider</th><th>状态</th><th>备注</th></tr>
+        </thead>
+        <tbody id="outboxRows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const ui = {
+      msg: document.getElementById('msg'),
+      err: document.getElementById('err'),
+      adminSecret: document.getElementById('adminSecret'),
+      usersCount: document.getElementById('usersCount'),
+      qCount: document.getElementById('qCount'),
+      mCount: document.getElementById('mCount'),
+      oCount: document.getElementById('oCount'),
+      weekday: document.getElementById('weekday'),
+      hour: document.getElementById('hour'),
+      minute: document.getElementById('minute'),
+      timezone: document.getElementById('timezone'),
+      emailProvider: document.getElementById('emailProvider'),
+      smtpHost: document.getElementById('smtpHost'),
+      smtpPort: document.getElementById('smtpPort'),
+      smtpSecure: document.getElementById('smtpSecure'),
+      smtpUser: document.getElementById('smtpUser'),
+      smtpPassword: document.getElementById('smtpPassword'),
+      resendApiKey: document.getElementById('resendApiKey'),
+      senderName: document.getElementById('senderName'),
+      senderEmail: document.getElementById('senderEmail'),
+      testEmail: document.getElementById('testEmail'),
+      runRows: document.getElementById('runRows'),
+      outboxRows: document.getElementById('outboxRows'),
+    }
+
+    function setMsg(text) { ui.msg.textContent = text || '' }
+    function setErr(text) { ui.err.textContent = text || '' }
+    function secret() { return ui.adminSecret.value.trim() }
+
+    async function adminFetch(path, init = {}) {
+      const headers = new Headers(init.headers || {})
+      headers.set('x-admin-secret', secret())
+      if (init.body) headers.set('content-type', 'application/json')
+      const res = await fetch(path, { ...init, headers })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.detail || `请求失败(${res.status})`)
+      return data
+    }
+
+    function fillSettings(s) {
+      ui.weekday.value = s.matching_weekday || '5'
+      ui.hour.value = s.matching_hour || '21'
+      ui.minute.value = s.matching_minute || '0'
+      ui.timezone.value = s.matching_timezone || 'Asia/Shanghai'
+      ui.emailProvider.value = s.email_provider || 'resend'
+      ui.resendApiKey.value = s.resend_api_key || ''
+      ui.smtpHost.value = s.smtp_host || ''
+      ui.smtpPort.value = s.smtp_port || '465'
+      ui.smtpSecure.value = s.smtp_secure || 'true'
+      ui.smtpUser.value = s.smtp_user || ''
+      ui.smtpPassword.value = s.smtp_password || ''
+      ui.senderName.value = s.sender_name || ''
+      ui.senderEmail.value = s.sender_email || ''
+    }
+
+    function renderRuns(items) {
+      ui.runRows.innerHTML = ''
+      for (const item of items || []) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${item.started_at || ''}</td>
+          <td>${item.trigger_source || ''}</td>
+          <td>${item.status || ''}</td>
+          <td>${item.week_start || ''}</td>
+          <td>${item.candidate_count || 0}</td>
+          <td>${item.pair_count || 0}</td>
+          <td>${item.created_matches || 0}</td>
+          <td>${item.error || ''}</td>
+        `
+        ui.runRows.appendChild(tr)
+      }
+    }
+
+    function renderOutbox(items) {
+      ui.outboxRows.innerHTML = ''
+      for (const item of items || []) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${item.created_at || ''}</td>
+          <td>${item.to_email || ''}</td>
+          <td>${item.subject || ''}</td>
+          <td>${item.provider || ''}</td>
+          <td>${item.status || ''}</td>
+          <td>${item.error || ''}</td>
+        `
+        ui.outboxRows.appendChild(tr)
+      }
+    }
+
+    async function refreshAll() {
+      setErr('')
+      const ov = await adminFetch('/api/admin/overview')
+      ui.usersCount.textContent = ov.counts.users || 0
+      ui.qCount.textContent = ov.counts.questionnaires || 0
+      ui.mCount.textContent = ov.counts.matches || 0
+      ui.oCount.textContent = ov.counts.outbox || 0
+      fillSettings(ov.settings || {})
+      renderRuns(ov.runs || [])
+
+      const outbox = await adminFetch('/api/admin/outbox')
+      renderOutbox(outbox.outbox || [])
+    }
+
+    document.getElementById('btnConnect').addEventListener('click', async () => {
+      try {
+        await refreshAll()
+        setMsg('后台连接成功')
+      } catch (e) {
+        setErr(e.message)
+      }
+    })
+
+    document.getElementById('btnSaveSchedule').addEventListener('click', async () => {
+      try {
+        await adminFetch('/api/admin/settings', {
+          method: 'PUT',
+          body: JSON.stringify({
+            matching_weekday: ui.weekday.value,
+            matching_hour: ui.hour.value,
+            matching_minute: ui.minute.value,
+            matching_timezone: ui.timezone.value,
+          }),
+        })
+        setMsg('调度配置已保存')
+      } catch (e) {
+        setErr(e.message)
+      }
+    })
+
+    document.getElementById('btnSaveEmail').addEventListener('click', async () => {
+      try {
+        await adminFetch('/api/admin/settings', {
+          method: 'PUT',
+          body: JSON.stringify({
+            email_provider: ui.emailProvider.value,
+            resend_api_key: ui.resendApiKey.value,
+            smtp_host: ui.smtpHost.value,
+            smtp_port: ui.smtpPort.value,
+            smtp_secure: ui.smtpSecure.value,
+            smtp_user: ui.smtpUser.value,
+            smtp_password: ui.smtpPassword.value,
+            sender_name: ui.senderName.value,
+            sender_email: ui.senderEmail.value,
+          }),
+        })
+        setMsg('发件箱配置已保存')
+      } catch (e) {
+        setErr(e.message)
+      }
+    })
+
+    document.getElementById('btnRunMatch').addEventListener('click', async () => {
+      try {
+        await adminFetch('/api/admin/run-matching', { method: 'POST' })
+        setMsg('匹配执行完成')
+        await refreshAll()
+      } catch (e) {
+        setErr(e.message)
+      }
+    })
+
+    document.getElementById('btnSendTest').addEventListener('click', async () => {
+      try {
+        await adminFetch('/api/admin/send-test-email', {
+          method: 'POST',
+          body: JSON.stringify({ to_email: ui.testEmail.value }),
+        })
+        setMsg('测试邮件记录已写入发件箱')
+        await refreshAll()
+      } catch (e) {
+        setErr(e.message)
+      }
+    })
+  </script>
+</body>
+</html>

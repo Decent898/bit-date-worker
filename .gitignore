@@ -1,0 +1,14 @@
+node_modules
+dist
+.wrangler
+.dev.vars
+.DS_Store
+.tmp-worker
+.env
+backend/.env
+__pycache__/
+*.pyc
+backend/celerybeat-schedule.bak
+backend/celerybeat-schedule.dat
+backend/celerybeat-schedule.dir
+tsconfig.tsbuildinfo
