@@ -89,7 +89,7 @@ export async function sha256(value: string): Promise<string> {
 
 export function isEduEmail(email: string): boolean {
   const lower = email.trim().toLowerCase()
-  return /.+@.+\.edu\.cn$/.test(lower)
+  return /.+@bit\.edu\.cn$/.test(lower)
 }
 
 export function thisWeekMonday(reference = new Date()): string {

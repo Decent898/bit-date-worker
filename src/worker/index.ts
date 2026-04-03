@@ -369,7 +369,7 @@ app.post('/api/auth/send-code', async (c) => {
     .json<{ email?: string }>()
     .catch(() => ({}) as { email?: string })
   const email = String(body.email ?? '').trim().toLowerCase()
-  if (!isEduEmail(email)) return badRequest('Only .edu.cn emails are allowed')
+  if (!isEduEmail(email)) return badRequest('Only bit.edu.cn email addresses are allowed')
 
   const code = randomCode()
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
@@ -409,7 +409,7 @@ app.post('/api/auth/register', async (c) => {
   const code = String(body.code ?? '').trim()
   const password = String(body.password ?? '')
 
-  if (!isEduEmail(email)) return badRequest('Only .edu.cn emails are allowed')
+  if (!isEduEmail(email)) return badRequest('Only bit.edu.cn email addresses are allowed')
   if (password.length < 8) return badRequest('Password must be at least 8 chars')
   if (!/^\d{6}$/.test(code)) return badRequest('Invalid verification code format')
 
