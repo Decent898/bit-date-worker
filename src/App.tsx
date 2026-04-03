@@ -45,6 +45,8 @@ const defaultQuestionnaire: QuestionnairePayload = {
     orientation: 'all',
     age: 20,
     grade: '',
+    relationship_goal: '',
+    ideal_date_style: '',
   },
   objective_answers: {
     sleep_time: 5,
@@ -52,13 +54,44 @@ const defaultQuestionnaire: QuestionnairePayload = {
     spending_style: 5,
     social_frequency: 5,
     exercise: 5,
+    cleanliness: 5,
+    planning_style: 5,
+    weekend_energy: 5,
+    study_rhythm: 5,
+    emotional_openness: 5,
+    empathy: 5,
+    reassurance_need: 5,
+    conflict_tolerance: 5,
+    need_for_space: 5,
+    vulnerability: 5,
+    repair_speed: 5,
+    initiative_preference: 5,
+    exclusivity_importance: 5,
+    public_affection_comfort: 5,
+    intellectual_resonance: 5,
+    humor_importance: 5,
+    appearance_importance: 5,
+    shared_hobbies_importance: 5,
+    emotional_stability_importance: 5,
+    ambition_importance: 5,
+    chemistry_importance: 5,
   },
   personality_traits: {
     role: '',
+    attachment_style: '',
+    flirting_style: '',
+    conflict_mode: '',
   },
   preferences: {
     min_age: 18,
     max_age: 25,
+    relationship_pace: '',
+    life_priority: '',
+    commitment_view: '',
+    growth_orientation: '',
+    independence_balance: 5,
+    future_stability: 5,
+    value_alignment_importance: 5,
   },
   tags: [],
   opt_in_weekly: false,
@@ -88,6 +121,62 @@ const roleOptions: CardOption[] = [
   { value: 'supporter', title: 'Supporter', caption: '🤝 支持者，我乐于辅助与照顾', icon: '🤝' },
   { value: 'planner', title: 'Planner', caption: '🧭 规划派，我习惯先把事情想清楚', icon: '🧭' },
   { value: 'explorer', title: 'Explorer', caption: '✨ 探索派，我更享受即兴与发现', icon: '✨' },
+]
+
+const relationshipGoalOptions: CardOption[] = [
+  { value: 'serious', title: '认真了解', caption: '更期待长期、稳定、逐步确认的关系', icon: '💍' },
+  { value: 'slow_burn', title: '慢热靠近', caption: '先从高质量相处开始，不急着定义', icon: '🌙' },
+  { value: 'friendship_first', title: '朋友优先', caption: '先成为舒服的人，再看会不会更进一步', icon: '🫶' },
+  { value: 'open', title: '保持开放', caption: '愿意认识新的人，也接受关系自然生长', icon: '🌿' },
+]
+
+const idealDateStyleOptions: CardOption[] = [
+  { value: 'quiet', title: '安静型约会', caption: '散步、咖啡、自习之后一起吃饭', icon: '☕' },
+  { value: 'citywalk', title: '校园漫游', caption: '边走边聊，慢慢从小事里熟悉彼此', icon: '🚶' },
+  { value: 'activity', title: '活动体验', caption: '羽毛球、展览、livehouse、短途出走', icon: '🎫' },
+  { value: 'deep_talk', title: '深聊型相处', caption: '我会被真诚、深入、有来有回的对话吸引', icon: '🗣️' },
+]
+
+const relationshipPaceOptions: CardOption[] = [
+  { value: 'slow', title: '慢慢来', caption: '节奏越稳，越能确认是不是彼此舒服', icon: '🐢' },
+  { value: 'balanced', title: '自然推进', caption: '有感觉就往前走，但不需要过早定义', icon: '⚖️' },
+  { value: 'clear', title: '希望明确', caption: '我更喜欢比较清晰的关系推进节奏', icon: '🎯' },
+]
+
+const lifePriorityOptions: CardOption[] = [
+  { value: 'career', title: '事业成长', caption: '我会被有目标感和成长欲的人吸引', icon: '🚀' },
+  { value: 'balance', title: '生活平衡', caption: '我更看重稳定、松弛、长期可持续', icon: '🪞' },
+  { value: 'connection', title: '情感连接', caption: '关系质量和精神共鸣对我尤其重要', icon: '💞' },
+]
+
+const commitmentViewOptions: CardOption[] = [
+  { value: 'exclusive', title: '偏向专一投入', caption: '一旦开始认真了解，我倾向于收束注意力', icon: '🔒' },
+  { value: 'gradual', title: '边观察边投入', caption: '确认契合后，我会自然进入更稳定的状态', icon: '🔍' },
+  { value: 'light', title: '先轻松相处', caption: '前期更看感觉，不急着做承诺', icon: '🍃' },
+]
+
+const growthOrientationOptions: CardOption[] = [
+  { value: 'stable', title: '稳定陪伴型', caption: '我喜欢情绪稳定、步调扎实的相处方式', icon: '🧱' },
+  { value: 'mutual', title: '共同成长型', caption: '希望彼此能互相激发、互相托举', icon: '🌱' },
+  { value: 'spark', title: '火花驱动型', caption: '我更容易被强烈吸引感和新鲜感点燃', icon: '⚡' },
+]
+
+const attachmentStyleOptions: CardOption[] = [
+  { value: 'secure', title: '安全型', caption: '我通常表达稳定，也不太害怕靠近', icon: '🫧' },
+  { value: 'anxious', title: '敏感型', caption: '我会更在意回应速度和关系确定感', icon: '💭' },
+  { value: 'avoidant', title: '克制型', caption: '我需要空间，也不喜欢被关系压得太紧', icon: '🛰️' },
+]
+
+const flirtingStyleOptions: CardOption[] = [
+  { value: 'gentle', title: '温柔试探', caption: '我会通过照顾、关心和陪伴慢慢靠近', icon: '🌤️' },
+  { value: 'playful', title: '轻松有梗', caption: '有趣、会聊天、会接梗对我很重要', icon: '🎈' },
+  { value: 'direct', title: '直接真诚', caption: '我更欣赏表达清楚、态度明确的靠近', icon: '🧭' },
+]
+
+const conflictModeOptions: CardOption[] = [
+  { value: 'talk', title: '倾向当下沟通', caption: '有问题最好及时说开，不想长久悬着', icon: '🗨️' },
+  { value: 'pause', title: '先缓一缓', caption: '我需要先沉淀情绪，再进入有效讨论', icon: '⏸️' },
+  { value: 'repair', title: '重视修复感', caption: '比谁对谁错更重要的是彼此怎么回到同一边', icon: '🪡' },
 ]
 
 const lifestyleSliders: SliderConfig[] = [
@@ -126,6 +215,162 @@ const lifestyleSliders: SliderConfig[] = [
     minLabel: '🛏️ 宿舍躺平',
     maxLabel: '🎒 特种兵出游',
   },
+  {
+    key: 'cleanliness',
+    label: '整洁度',
+    hint: '你的日常环境更偏随性还是规整？',
+    minLabel: '🌀 随手流',
+    maxLabel: '🧼 强秩序感',
+  },
+  {
+    key: 'planning_style',
+    label: '计划感',
+    hint: '面对生活安排时，你更偏计划还是即兴？',
+    minLabel: '🎲 顺其自然',
+    maxLabel: '🗂️ 提前规划',
+  },
+  {
+    key: 'weekend_energy',
+    label: '周末能量',
+    hint: '周末你通常想回血，还是继续探索世界？',
+    minLabel: '🧸 低耗恢复',
+    maxLabel: '🚄 高能出动',
+  },
+  {
+    key: 'study_rhythm',
+    label: '学习节奏',
+    hint: '你更适应稳定推进，还是冲刺爆发式完成？',
+    minLabel: '📚 均匀推进',
+    maxLabel: '🔥 截止驱动',
+  },
+]
+
+const emotionalSliders: SliderConfig[] = [
+  {
+    key: 'emotional_openness',
+    label: '情绪表达',
+    hint: '你会把情绪状态直接说出来，还是更习惯自己消化？',
+    minLabel: '🫥 比较克制',
+    maxLabel: '🫱 愿意表达',
+  },
+  {
+    key: 'empathy',
+    label: '共情敏感度',
+    hint: '你对他人情绪变化的感知有多强？',
+    minLabel: '🧱 偏理性',
+    maxLabel: '🌊 很能感受',
+  },
+  {
+    key: 'reassurance_need',
+    label: '确认感需求',
+    hint: '在关系里，你有多需要被明确回应和安抚？',
+    minLabel: '🛰️ 自我稳定',
+    maxLabel: '💌 很需要确认',
+  },
+  {
+    key: 'conflict_tolerance',
+    label: '冲突耐受',
+    hint: '你面对分歧时更容易想回避，还是愿意扛住不舒服继续沟通？',
+    minLabel: '🌫️ 容易退开',
+    maxLabel: '🪨 可以扛住',
+  },
+  {
+    key: 'need_for_space',
+    label: '私人空间',
+    hint: '你在关系里需要多少自己的独处空间？',
+    minLabel: '🤍 更想贴近',
+    maxLabel: '🌌 很需要空间',
+  },
+  {
+    key: 'vulnerability',
+    label: '脆弱表达',
+    hint: '你愿意把不安、疲惫、脆弱说给对方听吗？',
+    minLabel: '🪞 很少说',
+    maxLabel: '🫶 愿意袒露',
+  },
+]
+
+const attractionSliders: SliderConfig[] = [
+  {
+    key: 'intellectual_resonance',
+    label: '思维共鸣',
+    hint: '聊得来、脑回路对上，对你有多重要？',
+    minLabel: '🙂 加分项',
+    maxLabel: '🧠 核心吸引力',
+  },
+  {
+    key: 'humor_importance',
+    label: '幽默感',
+    hint: '会接梗、懂幽默，会大幅影响你的好感吗？',
+    minLabel: '😌 可有可无',
+    maxLabel: '🤣 非常重要',
+  },
+  {
+    key: 'appearance_importance',
+    label: '外在吸引',
+    hint: '第一眼的外在感觉，在你的判断里占多大比重？',
+    minLabel: '🌫️ 不太关键',
+    maxLabel: '✨ 影响很大',
+  },
+  {
+    key: 'shared_hobbies_importance',
+    label: '共同爱好',
+    hint: '有共同活动和兴趣，会不会显著提高你的进入感？',
+    minLabel: '🧩 不是必须',
+    maxLabel: '🎯 很重要',
+  },
+  {
+    key: 'emotional_stability_importance',
+    label: '情绪稳定',
+    hint: '你会多看重一个人的稳定感和处理情绪的能力？',
+    minLabel: '🙂 普通重要',
+    maxLabel: '🛟 极其重要',
+  },
+  {
+    key: 'ambition_importance',
+    label: '目标感',
+    hint: '你会被有方向感、有野心的人吸引吗？',
+    minLabel: '🍃 顺其自然也很好',
+    maxLabel: '📈 很有吸引力',
+  },
+  {
+    key: 'chemistry_importance',
+    label: '化学反应',
+    hint: '比起条件匹配，你有多看重“就是有感觉”？',
+    minLabel: '🧾 更看条件',
+    maxLabel: '⚡ 很看感觉',
+  },
+]
+
+const styleSliders: SliderConfig[] = [
+  {
+    key: 'repair_speed',
+    label: '修复速度',
+    hint: '发生不舒服后，你希望多快回到沟通和修复？',
+    minLabel: '🕰️ 慢一点再说',
+    maxLabel: '🔧 尽快修复',
+  },
+  {
+    key: 'initiative_preference',
+    label: '主动程度',
+    hint: '关系推进里，你更习惯自己主动还是更希望对方先发出信号？',
+    minLabel: '🌙 更希望被带动',
+    maxLabel: '🔥 我愿意主动',
+  },
+  {
+    key: 'exclusivity_importance',
+    label: '专一感预期',
+    hint: '进入认真了解阶段后，你有多在意对方是否收束注意力？',
+    minLabel: '🌫️ 不急着限定',
+    maxLabel: '🔒 很在意',
+  },
+  {
+    key: 'public_affection_comfort',
+    label: '公开表达舒适度',
+    hint: '你对在公开场合展现亲密或关系存在感的接受度如何？',
+    minLabel: '🫥 越低调越好',
+    maxLabel: '🌤️ 自然公开也可以',
+  },
 ]
 
 const stepMeta = [
@@ -141,8 +386,23 @@ const stepMeta = [
   },
   {
     eyebrow: 'Module 03',
-    title: '在一段关系里，你想扮演什么角色？',
-    description: '最后补上互动方式与兴趣线索，让匹配不只停留在“条件对上”。',
+    title: '你的核心价值观，会决定一段关系的走向',
+    description: '这部分不是在挑标准答案，而是在捕捉你真正重视什么。'
+  },
+  {
+    eyebrow: 'Module 04',
+    title: '你的情感颗粒度，决定彼此能否被温柔理解',
+    description: '当关系开始变真实，情绪如何流动，往往比表面条件更关键。',
+  },
+  {
+    eyebrow: 'Module 05',
+    title: '你在情感里的默认风格，是怎样靠近和修复的',
+    description: '关系风格不需要完美，但足够可读，系统才更容易筛到真正合适的人。'
+  },
+  {
+    eyebrow: 'Module 06',
+    title: '最后说说，你会被什么样的人真正吸引',
+    description: '把吸引力、预期和关键词补全，这份画像就会更接近真实的你。',
   },
 ] as const
 
@@ -352,6 +612,20 @@ export default function App() {
         preferences: nextPreferences,
       }
     })
+  }
+
+  function updatePreferenceValue(key: string, value: unknown) {
+    setQuestionnaire((current) => ({
+      ...current,
+      preferences: { ...current.preferences, [key]: value },
+    }))
+  }
+
+  function updateTraitValue(key: string, value: unknown) {
+    setQuestionnaire((current) => ({
+      ...current,
+      personality_traits: { ...current.personality_traits, [key]: value },
+    }))
   }
 
   async function sendCode() {
@@ -616,25 +890,201 @@ export default function App() {
       )
     }
 
+    if (questionnaireStep === 2) {
+      return (
+        <>
+          <SelectCardGroup
+            title="你更希望关系以怎样的节奏推进？"
+            hint="有的人需要慢慢确认，有的人更希望早一点知道彼此是不是认真。"
+            options={relationshipPaceOptions}
+            value={String(questionnaire.preferences.relationship_pace ?? '')}
+            onChange={(value) => updatePreferenceValue('relationship_pace', value)}
+          />
+
+          <SelectCardGroup
+            title="现阶段的人生里，你更看重什么？"
+            hint="关系不是脱离现实的，它一定会和你眼下的重心产生互动。"
+            options={lifePriorityOptions}
+            value={String(questionnaire.preferences.life_priority ?? '')}
+            onChange={(value) => updatePreferenceValue('life_priority', value)}
+          />
+
+          <SelectCardGroup
+            title="你怎么看待“开始认真了解”这件事？"
+            hint="不同人对投入边界的理解不一样，提前对齐会减少很多误解。"
+            options={commitmentViewOptions}
+            value={String(questionnaire.preferences.commitment_view ?? '')}
+            onChange={(value) => updatePreferenceValue('commitment_view', value)}
+          />
+
+          <SelectCardGroup
+            title="你理想中的关系，更像哪一种成长方式？"
+            hint="稳定、共进，还是火花驱动？这会直接影响你被什么样的人打动。"
+            options={growthOrientationOptions}
+            value={String(questionnaire.preferences.growth_orientation ?? '')}
+            onChange={(value) => updatePreferenceValue('growth_orientation', value)}
+          />
+
+          <section className="question-block">
+            <div className="question-block__copy">
+              <h3>再补三道更细的价值观刻度</h3>
+              <p>让系统知道，你对边界感、稳定感和价值同频究竟看得有多重。</p>
+            </div>
+            <div className="range-stack">
+              <RangeField
+                label="亲密与独立"
+                hint="你希望关系多紧密？又保留多少个人边界？"
+                minLabel="🫱 更想贴近"
+                maxLabel="🪐 更重独立"
+                value={Number(questionnaire.preferences.independence_balance ?? 5)}
+                onChange={(value) => updatePreferenceValue('independence_balance', value)}
+              />
+              <RangeField
+                label="稳定感需求"
+                hint="一段关系里，稳定、规律、可预期对你有多重要？"
+                minLabel="🌿 自然就好"
+                maxLabel="🧱 很重要"
+                value={Number(questionnaire.preferences.future_stability ?? 5)}
+                onChange={(value) => updatePreferenceValue('future_stability', value)}
+              />
+              <RangeField
+                label="价值观对齐"
+                hint="三观接近这件事，在你的好感形成里占多大比重？"
+                minLabel="🙂 加分项"
+                maxLabel="🧭 核心条件"
+                value={Number(questionnaire.preferences.value_alignment_importance ?? 5)}
+                onChange={(value) => updatePreferenceValue('value_alignment_importance', value)}
+              />
+            </div>
+          </section>
+        </>
+      )
+    }
+
+    if (questionnaireStep === 3) {
+      return (
+        <section className="question-block">
+          <div className="question-block__copy">
+            <h3>情感颗粒度，是“聊得来”之外更深的一层契合</h3>
+            <p>这一组会帮助系统判断，你是怎样感受、处理和表达情绪的。</p>
+          </div>
+          <div className="range-stack">
+            {emotionalSliders.map((slider) => (
+              <RangeField
+                key={slider.key}
+                label={slider.label}
+                hint={slider.hint}
+                minLabel={slider.minLabel}
+                maxLabel={slider.maxLabel}
+                value={Number(questionnaire.objective_answers[slider.key] ?? 5)}
+                onChange={(value) => updateObjective(slider.key, value)}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    if (questionnaireStep === 4) {
+      return (
+        <>
+          <SelectCardGroup
+            title="在一段关系中，你倾向于扮演什么角色？"
+            hint="不用追求标准答案，只要选那个最像你在真实互动里会做的事。"
+            options={roleOptions}
+            value={String(questionnaire.personality_traits.role ?? '')}
+            onChange={(value) => updateTraitValue('role', value)}
+          />
+
+          <SelectCardGroup
+            title="你的情感依附风格更接近哪一种？"
+            hint="不是心理学考试，只是帮助系统捕捉你在靠近关系时的默认反应。"
+            options={attachmentStyleOptions}
+            value={String(questionnaire.personality_traits.attachment_style ?? '')}
+            onChange={(value) => updateTraitValue('attachment_style', value)}
+          />
+
+          <SelectCardGroup
+            title="你会用什么方式释放好感？"
+            hint="有人靠细节，有人靠幽默，有人靠直接表达。"
+            options={flirtingStyleOptions}
+            value={String(questionnaire.personality_traits.flirting_style ?? '')}
+            onChange={(value) => updateTraitValue('flirting_style', value)}
+          />
+
+          <SelectCardGroup
+            title="出现不舒服时，你更接近哪种处理方式？"
+            hint="这会影响一段关系遇到摩擦时，彼此是不是容易错开。"
+            options={conflictModeOptions}
+            value={String(questionnaire.personality_traits.conflict_mode ?? '')}
+            onChange={(value) => updateTraitValue('conflict_mode', value)}
+          />
+
+          <section className="question-block">
+            <div className="question-block__copy">
+              <h3>再往前一步，把你的互动风格量化出来</h3>
+              <p>这些不是对错题，只是让关系风格更具体、更能被真正理解。</p>
+            </div>
+            <div className="range-stack">
+              {styleSliders.map((slider) => (
+                <RangeField
+                  key={slider.key}
+                  label={slider.label}
+                  hint={slider.hint}
+                  minLabel={slider.minLabel}
+                  maxLabel={slider.maxLabel}
+                  value={Number(questionnaire.objective_answers[slider.key] ?? 5)}
+                  onChange={(value) => updateObjective(slider.key, value)}
+                />
+              ))}
+            </div>
+          </section>
+        </>
+      )
+    }
+
     return (
       <>
         <SelectCardGroup
-          title="在一段关系中，你倾向于扮演什么角色？"
-          hint="不用追求标准答案，只要选那个最像你在真实互动里会做的事。"
-          options={roleOptions}
-          value={String(questionnaire.personality_traits.role ?? '')}
-          onChange={(value) =>
-            setQuestionnaire((current) => ({
-              ...current,
-              personality_traits: { ...current.personality_traits, role: value },
-            }))
-          }
+          title="你更希望第一次约会像什么？"
+          hint="它不一定真的发生，但能很好地暴露你期待怎样的靠近方式。"
+          options={idealDateStyleOptions}
+          value={String(questionnaire.profile.ideal_date_style ?? '')}
+          onChange={(value) => updateProfile('ideal_date_style', value)}
+        />
+
+        <SelectCardGroup
+          title="你现在想开启的是怎样的关系旅程？"
+          hint="不需要给未来下定义，只要说清楚你此刻愿意走到哪一步。"
+          options={relationshipGoalOptions}
+          value={String(questionnaire.profile.relationship_goal ?? '')}
+          onChange={(value) => updateProfile('relationship_goal', value)}
         />
 
         <section className="question-block">
           <div className="question-block__copy">
-            <h3>如果要给未来的相遇留一些关键词，你会写什么？</h3>
-            <p>可以是爱好、校园日常，也可以是你最希望被理解的那部分自己。</p>
+            <h3>吸引力与预期，比“条件匹配”更接近真实心动</h3>
+            <p>这组问题会让系统更接近你真正会心动的那种人，而不是只有表面合适。</p>
+          </div>
+          <div className="range-stack">
+            {attractionSliders.map((slider) => (
+              <RangeField
+                key={slider.key}
+                label={slider.label}
+                hint={slider.hint}
+                minLabel={slider.minLabel}
+                maxLabel={slider.maxLabel}
+                value={Number(questionnaire.objective_answers[slider.key] ?? 5)}
+                onChange={(value) => updateObjective(slider.key, value)}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="question-block">
+          <div className="question-block__copy">
+            <h3>最后，用关键词把这份画像补到更像你</h3>
+            <p>可以是兴趣、校园日常、情绪偏好，也可以是你最希望被对方读懂的细节。</p>
           </div>
           <textarea
             className="tag-textarea"

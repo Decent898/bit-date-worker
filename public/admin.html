@@ -23,6 +23,7 @@
     th, td { border-bottom: 1px solid #e8eef4; padding: 8px; text-align: left; vertical-align: top; }
     .table-wrap { overflow-x: auto; }
     .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eef4ff; color: #1d4ed8; font-size: 12px; }
+    .mini { font-size: 12px; line-height: 1.6; color: #415166; white-space: pre-line; }
     .muted { color: #617082; font-size: 13px; }
     #msg { margin-top: 6px; min-height: 20px; color: #0a7a45; }
     #err { margin-top: 6px; min-height: 20px; color: #c53030; }
@@ -138,7 +139,7 @@
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>更新时间</th><th>用户 ID</th><th>参与周配对</th><th>Profile</th><th>Tags</th></tr>
+            <tr><th>更新时间</th><th>用户 ID</th><th>参与周配对</th><th>基础画像</th><th>生活习惯</th><th>性格角色</th><th>偏好</th><th>Tags</th></tr>
           </thead>
           <tbody id="questionnaireRows"></tbody>
         </table>
@@ -271,6 +272,59 @@
       return text.length > 140 ? text.slice(0, 140) + '…' : text
     }
 
+    function parseJson(value, fallback = {}) {
+      if (!value) return fallback
+      if (typeof value === 'object') return value || fallback
+      try {
+        return JSON.parse(value)
+      } catch {
+        return fallback
+      }
+    }
+
+    function questionnaireProfileText(item) {
+      const profile = parseJson(item.profile)
+      const genderMap = { male: '男', female: '女' }
+      const orientationMap = { same: '同性', different: '异性', all: '都可以' }
+      const gradeMap = {
+        freshman: '大一',
+        sophomore: '大二',
+        junior: '大三',
+        senior: '大四',
+        graduate: '研究生及以上',
+      }
+      return [
+        `性别: ${genderMap[profile.gender] || profile.gender || '-'}`,
+        `取向: ${orientationMap[profile.orientation] || profile.orientation || '-'}`,
+        `年龄: ${profile.age || '-'}`,
+        `年级: ${gradeMap[profile.grade] || profile.grade || '-'}`,
+      ].join('\n')
+    }
+
+    function questionnaireObjectiveText(item) {
+      const objective = parseJson(item.objective_answers)
+      return [
+        `sleep_time: ${objective.sleep_time ?? '-'}`,
+        `wake_time: ${objective.wake_time ?? '-'}`,
+        `spending_style: ${objective.spending_style ?? '-'}`,
+        `social_frequency: ${objective.social_frequency ?? '-'}`,
+        `exercise: ${objective.exercise ?? '-'}`,
+      ].join('\n')
+    }
+
+    function questionnaireTraitsText(item) {
+      const traits = parseJson(item.personality_traits)
+      return `role: ${traits.role || '-'}`
+    }
+
+    function questionnairePreferencesText(item) {
+      const preferences = parseJson(item.preferences)
+      return [
+        `min_age: ${preferences.min_age ?? '-'}`,
+        `max_age: ${preferences.max_age ?? '-'}`,
+      ].join('\n')
+    }
+
     function renderUsers(items) {
       ui.usersRows.innerHTML = ''
       for (const item of items || []) {
@@ -294,7 +348,10 @@
           <td>${item.updated_at || ''}</td>
           <td>${item.user_id || ''}</td>
           <td>${Number(item.opt_in_weekly || 0) ? 'yes' : 'no'}</td>
-          <td>${shortJson(item.profile)}</td>
+          <td><div class="mini">${questionnaireProfileText(item)}</div></td>
+          <td><div class="mini">${questionnaireObjectiveText(item)}</div></td>
+          <td><div class="mini">${questionnaireTraitsText(item)}</div></td>
+          <td><div class="mini">${questionnairePreferencesText(item)}</div></td>
           <td>${shortJson(item.tags)}</td>
         `
         ui.questionnaireRows.appendChild(tr)
