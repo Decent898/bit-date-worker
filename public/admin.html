@@ -21,6 +21,8 @@
     .tile strong { display: block; font-size: 20px; margin-bottom: 4px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th, td { border-bottom: 1px solid #e8eef4; padding: 8px; text-align: left; vertical-align: top; }
+    .table-wrap { overflow-x: auto; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eef4ff; color: #1d4ed8; font-size: 12px; }
     .muted { color: #617082; font-size: 13px; }
     #msg { margin-top: 6px; min-height: 20px; color: #0a7a45; }
     #err { margin-top: 6px; min-height: 20px; color: #c53030; }
@@ -101,12 +103,70 @@
 
     <div class="card">
       <h2>发件箱日志</h2>
+      <div class="table-wrap">
       <table>
         <thead>
           <tr><th>创建时间</th><th>收件人</th><th>主题</th><th>provider</th><th>状态</th><th>备注</th></tr>
         </thead>
         <tbody id="outboxRows"></tbody>
       </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>数据库数据预览</h2>
+      <p class="muted">只读展示最近 100 条核心数据，不包含密码哈希。</p>
+      <div class="actions">
+        <button id="btnRefreshData" class="secondary">刷新数据预览</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Users</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>创建时间</th><th>系统 ID</th><th>邮箱</th><th>状态</th><th>用户 ID</th></tr>
+          </thead>
+          <tbody id="usersRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Questionnaires</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>更新时间</th><th>用户 ID</th><th>参与周配对</th><th>Profile</th><th>Tags</th></tr>
+          </thead>
+          <tbody id="questionnaireRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Match Results</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>创建时间</th><th>周起始</th><th>A</th><th>B</th><th>分数</th><th>状态</th><th>理由</th></tr>
+          </thead>
+          <tbody id="matchRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Contact Messages</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>创建时间</th><th>周起始</th><th>发送方</th><th>接收方</th><th>内容</th></tr>
+          </thead>
+          <tbody id="contactRows"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -135,6 +195,10 @@
       testEmail: document.getElementById('testEmail'),
       runRows: document.getElementById('runRows'),
       outboxRows: document.getElementById('outboxRows'),
+      usersRows: document.getElementById('usersRows'),
+      questionnaireRows: document.getElementById('questionnaireRows'),
+      matchRows: document.getElementById('matchRows'),
+      contactRows: document.getElementById('contactRows'),
     }
 
     function setMsg(text) { ui.msg.textContent = text || '' }
@@ -201,6 +265,82 @@
       }
     }
 
+    function shortJson(value) {
+      if (!value) return ''
+      const text = typeof value === 'string' ? value : JSON.stringify(value)
+      return text.length > 140 ? text.slice(0, 140) + '…' : text
+    }
+
+    function renderUsers(items) {
+      ui.usersRows.innerHTML = ''
+      for (const item of items || []) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${item.created_at || ''}</td>
+          <td><span class="pill">${item.system_id || ''}</span></td>
+          <td>${item.email || ''}</td>
+          <td>${Number(item.is_active || 0) ? 'active' : 'inactive'}</td>
+          <td>${item.id || ''}</td>
+        `
+        ui.usersRows.appendChild(tr)
+      }
+    }
+
+    function renderQuestionnaires(items) {
+      ui.questionnaireRows.innerHTML = ''
+      for (const item of items || []) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${item.updated_at || ''}</td>
+          <td>${item.user_id || ''}</td>
+          <td>${Number(item.opt_in_weekly || 0) ? 'yes' : 'no'}</td>
+          <td>${shortJson(item.profile)}</td>
+          <td>${shortJson(item.tags)}</td>
+        `
+        ui.questionnaireRows.appendChild(tr)
+      }
+    }
+
+    function renderMatches(items) {
+      ui.matchRows.innerHTML = ''
+      for (const item of items || []) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${item.created_at || ''}</td>
+          <td>${item.week_start || ''}</td>
+          <td>${item.user_a_id || ''}</td>
+          <td>${item.user_b_id || ''}</td>
+          <td>${item.score || 0}</td>
+          <td>${item.status || ''}</td>
+          <td>${shortJson(item.reason_text)}</td>
+        `
+        ui.matchRows.appendChild(tr)
+      }
+    }
+
+    function renderContacts(items) {
+      ui.contactRows.innerHTML = ''
+      for (const item of items || []) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${item.created_at || ''}</td>
+          <td>${item.week_start || ''}</td>
+          <td>${item.from_user_id || ''}</td>
+          <td>${item.to_user_id || ''}</td>
+          <td>${shortJson(item.message)}</td>
+        `
+        ui.contactRows.appendChild(tr)
+      }
+    }
+
+    async function refreshDataPreview() {
+      const data = await adminFetch('/api/admin/data-preview')
+      renderUsers(data.users || [])
+      renderQuestionnaires(data.questionnaires || [])
+      renderMatches(data.matches || [])
+      renderContacts(data.contacts || [])
+    }
+
     async function refreshAll() {
       setErr('')
       const ov = await adminFetch('/api/admin/overview')
@@ -213,12 +353,22 @@
 
       const outbox = await adminFetch('/api/admin/outbox')
       renderOutbox(outbox.outbox || [])
+      await refreshDataPreview()
     }
 
     document.getElementById('btnConnect').addEventListener('click', async () => {
       try {
         await refreshAll()
         setMsg('后台连接成功')
+      } catch (e) {
+        setErr(e.message)
+      }
+    })
+
+    document.getElementById('btnRefreshData').addEventListener('click', async () => {
+      try {
+        await refreshDataPreview()
+        setMsg('数据预览已刷新')
       } catch (e) {
         setErr(e.message)
       }

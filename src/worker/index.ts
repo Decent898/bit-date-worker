@@ -716,6 +716,54 @@ app.get('/api/admin/outbox', async (c) => {
   return json({ outbox: rows.results ?? [] })
 })
 
+app.get('/api/admin/data-preview', async (c) => {
+  const err = await requireAdmin(c)
+  if (err) return err
+
+  const users = await c.env.DB
+    .prepare(
+      `SELECT id, system_id, email, is_active, created_at
+       FROM users
+       ORDER BY created_at DESC
+       LIMIT 100`,
+    )
+    .all<Record<string, unknown>>()
+
+  const questionnaires = await c.env.DB
+    .prepare(
+      `SELECT user_id, profile, objective_answers, personality_traits, preferences, tags, opt_in_weekly, updated_at
+       FROM questionnaires
+       ORDER BY updated_at DESC
+       LIMIT 100`,
+    )
+    .all<Record<string, unknown>>()
+
+  const matches = await c.env.DB
+    .prepare(
+      `SELECT id, week_start, user_a_id, user_b_id, score, reason_text, status, created_at
+       FROM match_results
+       ORDER BY created_at DESC
+       LIMIT 100`,
+    )
+    .all<Record<string, unknown>>()
+
+  const contacts = await c.env.DB
+    .prepare(
+      `SELECT id, week_start, from_user_id, to_user_id, message, created_at
+       FROM contact_messages
+       ORDER BY created_at DESC
+       LIMIT 100`,
+    )
+    .all<Record<string, unknown>>()
+
+  return json({
+    users: users.results ?? [],
+    questionnaires: questionnaires.results ?? [],
+    matches: matches.results ?? [],
+    contacts: contacts.results ?? [],
+  })
+})
+
 app.post('/api/admin/send-test-email', async (c) => {
   const err = await requireAdmin(c)
   if (err) return err
